@@ -66,11 +66,11 @@ namespace SimpleLogger
         {
             try
             {
-                return $"in '{Path.GetFileNameWithoutExtension(callerFilePath)}.{callerName}()' at Line: '{lineNumber}'{Environment.NewLine}";
+                return $"in '{Path.GetFileNameWithoutExtension(callerFilePath)}.{callerName}()' at Line: '{lineNumber}' --- ";
             }
             catch (Exception e)
             {
-                return $" -- N/A -- {Environment.NewLine}";
+                return $" -- N/A -- {Environment.NewLine} {e.Message}  {Environment.NewLine}";
             }
         }
 
