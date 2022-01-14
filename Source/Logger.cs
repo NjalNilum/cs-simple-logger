@@ -12,10 +12,10 @@ namespace SimpleLogger
         /// <summary>
         /// Ctor
         /// </summary>
-        public Logger(string nameOfLogger="logFile.txt", int sizeOfLogFile=10)
+        public Logger(string nameOfLogger = "logFile.txt", int sizeOfLogFile = 10)
         {
-            pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLogger);
-            sizeOfLogFileInMb = Mebibyte * sizeOfLogFile;
+            this.pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLogger);
+            this.sizeOfLogFileInMb = Mebibyte * sizeOfLogFile;
         }
 
         // self-explanatory
@@ -49,9 +49,9 @@ namespace SimpleLogger
         }
 
         // self-explanatory
-        public void LogError(string message, 
-                             [CallerMemberName] string callerName = "", 
-                             [CallerFilePath] string callerFilePath = "", 
+        public void LogError(string message,
+                             [CallerMemberName] string callerName = "",
+                             [CallerFilePath] string callerFilePath = "",
                              [CallerLineNumber] int lineNumber = 0)
         {
             message = BuildCallerInfo(callerName, callerFilePath, lineNumber) + message;
@@ -76,20 +76,25 @@ namespace SimpleLogger
 
         /// <summary>
         /// Self-explanatory.
-        /// 
         /// If log file becomes greater than 10 MB, it will be deleted.
+        /// Unfortunately, no RollingFileAppender is currently implemented. So there is only one log file, which is overwritten
+        /// again from a size of 10 MB (default).
         /// </summary>
         private void LogRaw(string message, string kindOf, ConsoleColor color)
         {
             try
             {
-                lock (loggingLock)
+                lock (this.loggingLock)
                 {
-                    if (!File.Exists(pathToLogFile) || new FileInfo(pathToLogFile).Length >= this.sizeOfLogFileInMb)
+                    if (!File.Exists(this.pathToLogFile) || new FileInfo(this.pathToLogFile).Length >= this.sizeOfLogFileInMb)
                     {
-                        using (File.Create(this.pathToLogFile)) { }
+                        // FielCreate overwrites the existing file when the specified size is reached.
+                        using (File.Create(this.pathToLogFile))
+                        {
+                        }
                     }
 
+                    // Yes, sWriter and the using block are indeed good and necessary to ensure that the filestream is closed cleanly
                     using TextWriter sWriter = File.AppendText(this.pathToLogFile);
                     var s = $"{kindOf} - {DateTime.Now} - Thread {Environment.CurrentManagedThreadId:00} {message}";
                     sWriter.WriteLine(s);
