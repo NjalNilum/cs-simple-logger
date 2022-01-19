@@ -12,11 +12,11 @@ namespace SimpleLogger
        /// <summary>
        /// Ctor
        /// </summary>
-       /// <param name="nameOfLogger">Name of your logger file</param>
+       /// <param name="nameOfLoggerFile">Name of your logger file</param>
        /// <param name="sizeOfLogFile">Size of log file in MB</param>
-        public Logger(string nameOfLogger = "logFile.txt", int sizeOfLogFile = 10)
+        public Logger(string nameOfLoggerFile = "logFile.txt", int sizeOfLogFile = 10)
         {
-            this.pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLogger);
+            this.pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLoggerFile);
             this.sizeOfLogFileInMb = Mebibyte * sizeOfLogFile;
         }
 
