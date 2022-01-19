@@ -9,9 +9,11 @@ namespace SimpleLogger
         private readonly long sizeOfLogFileInMb;
         private const int Mebibyte = 1048576;
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
+       /// <summary>
+       /// Ctor
+       /// </summary>
+       /// <param name="nameOfLogger">Name of your logger file</param>
+       /// <param name="sizeOfLogFile">Size of log file in MB</param>
         public Logger(string nameOfLogger = "logFile.txt", int sizeOfLogFile = 10)
         {
             this.pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLogger);
