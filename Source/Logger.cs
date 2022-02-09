@@ -9,14 +9,19 @@ namespace SimpleLogger
         private readonly long sizeOfLogFileInMb;
         private const int Mebibyte = 1048576;
 
-       /// <summary>
-       /// Ctor
-       /// </summary>
-       /// <param name="nameOfLoggerFile">Name of your logger file</param>
-       /// <param name="sizeOfLogFile">Size of log file in MB</param>
-        public Logger(string nameOfLoggerFile = "logFile.txt", int sizeOfLogFile = 10)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="nameOfLoggerFile">Name of your logger file</param>
+        /// <param name="sizeOfLogFile">Size of log file in MB</param>
+        public Logger(string nameOfLoggerFile = "logFile.log", int sizeOfLogFile = 10)
         {
-            this.pathToLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameOfLoggerFile);
+            var pathToLogDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log");
+            if (!Directory.Exists(pathToLogDir))
+            {
+                Directory.CreateDirectory(pathToLogDir);
+            }
+            this.pathToLogFile = Path.Combine(pathToLogDir, nameOfLoggerFile);
             this.sizeOfLogFileInMb = Mebibyte * sizeOfLogFile;
         }
 
@@ -37,7 +42,7 @@ namespace SimpleLogger
                              [CallerLineNumber] int lineNumber = 0)
         {
             message = BuildCallerInfo(callerName, callerFilePath, lineNumber) + message;
-            LogRaw(message, "DEBUG", ConsoleColor.Gray);
+            LogRaw(message, "DEBUG", ConsoleColor.DarkGray);
         }
 
         // self-explanatory
@@ -100,9 +105,10 @@ namespace SimpleLogger
                     using TextWriter sWriter = File.AppendText(this.pathToLogFile);
                     var s = $"{kindOf} - {DateTime.Now} - Thread {Environment.CurrentManagedThreadId:00} {message}";
                     sWriter.WriteLine(s);
+                    var colorB4 = Console.ForegroundColor;
                     Console.ForegroundColor = color;
                     Console.WriteLine(s);
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = colorB4;
                 }
             }
             catch (Exception ex)
