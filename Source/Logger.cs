@@ -13,10 +13,15 @@ namespace SimpleLogger
         /// Ctor
         /// </summary>
         /// <param name="nameOfLoggerFile">Name of your logger file</param>
+        /// <param name="pathToLogDir">Path to log directory</param>
         /// <param name="sizeOfLogFile">Size of log file in MB</param>
-        public Logger(string nameOfLoggerFile = "logFile.log", int sizeOfLogFile = 10)
+        public Logger(string nameOfLoggerFile = "logFile.log", string pathToLogDir = "", int sizeOfLogFile = 10)
         {
-            var pathToLogDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log");
+            if (string.IsNullOrEmpty(pathToLogDir))
+            {
+                pathToLogDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log");
+            }
+
             if (!Directory.Exists(pathToLogDir))
             {
                 Directory.CreateDirectory(pathToLogDir);
