@@ -108,7 +108,7 @@ namespace SimpleLogger
 
                     // Yes, sWriter and the using block are indeed good and necessary to ensure that the filestream is closed cleanly
                     using TextWriter sWriter = File.AppendText(this.pathToLogFile);
-                    var s = $"{kindOf} - {DateTime.Now} - Thread {Environment.CurrentManagedThreadId:00} {message}";
+                    var s = $"{kindOf} - {DateTime.Now:dd.MM.yyyy hh:mm:ss} - Thread {Environment.CurrentManagedThreadId:00} {message}";
                     sWriter.WriteLine(s);
                     var colorB4 = Console.ForegroundColor;
                     Console.ForegroundColor = color;
